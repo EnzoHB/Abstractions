@@ -155,12 +155,16 @@ function StringAbstractions(constructor) {
 
 StringAbstractions(String)
 
+/*
 console.log('1.4...'.toFraction()); // Correto
 console.log('1.356565...'.toFraction()); // correto
 console.log('1.4543...'.toFraction()) // correto
 console.log('1.4433...'.toFraction())
 console.log('1.454456456...'.toFraction());
 console.log('1.454456456456...'.toFraction());
+*/
+
+console.log('0'.toFraction())
 
 // reduceRight() da esquerda para direita
 // Começar assumindo um período de 1
