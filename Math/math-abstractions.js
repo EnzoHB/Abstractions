@@ -39,6 +39,7 @@ function MathAbstractions(prototype) {
 
             return numerator / denominator;
     };
+
     prototype.factors = (array) => {
 
         return array.map(tracker => {
@@ -93,8 +94,4 @@ function MathAbstractions(prototype) {
 export { MathAbstractions };
 
 // Array almostRandom;
-// Fraction.gcd
-// Fraction.lcm
-// Fraction.equivalent
-
-
+// To Fraction

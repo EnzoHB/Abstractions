@@ -27,7 +27,7 @@ const Fraction = {
         const denominator = Math.lcm(fractions.map(frac => frac[1]));
         const numerator = fractions.map(frac => denominator / frac[1] * frac[0]).reduce((a, b) => type == 0? a + b : a - b);
 
-        return Fraction.simplify([[numerator, denominator]])[0];
+        return Fraction.simplify([numerator, denominator]);
     },
 
 // This method calculates both multiplication and division.
@@ -46,7 +46,7 @@ const Fraction = {
         const numerator = fractions.map(frac => frac[0]).reduce((a, b) => a * b);
         const denominator = fractions.map(frac => frac[1]).reduce((a, b) => a * b);
 
-        return Fraction.simplify([[numerator, denominator]])[0];
+        return Fraction.simplify([numerator, denominator]);
     },
 
 // Abstraction that mixes all others and lets you 
@@ -54,7 +54,7 @@ const Fraction = {
 
     calculate: (...operations) => {
 
-        if (operations.length == 1) return operations[0];
+        if (operations.length == 1) return Fraction.simplify(operations[0]);
 
         const details = find();
         const before = operations[details.index - 1]; 
@@ -131,10 +131,8 @@ const Fraction = {
 // the numerator and denominator and then, dividing them by it.
 
     simplify: (array) => {
-        const gcd = array.map(a => Math.gcd(a));
-        return array.map((a, b) => {
-            return a.map(c => !Number.isNaN(gcd[b])? c / gcd[b] : c);
-        });
+        const gcd = Math.gcd(array);
+        return array.map(a => !Number.isNaN(gcd)? a / gcd : a)
     },
 
 // This functions converts the fraction into decimals by dividing its
@@ -173,7 +171,7 @@ const Fraction = {
     gcd: (array) => {
 
         if (Fraction.validate(array)) return NaN;
-        const simplified = Fraction.simplify(array);
+        const simplified = array.map(a => Fraction.simplify(a));
 
         for (;;) {
             const part = simplified.slice(0, 2);
@@ -205,10 +203,8 @@ const Fraction = {
         const denominator = Fraction.gcd(array);
         const fraction = Fraction.divide([numerator, denominator]);
 
-        return Fraction.simplify([fraction])[0];
+        return Fraction.simplify(fraction);
     },
 };
 
-console.log(Fraction.gcd([[56, 78], [90, 12], [34, 56], [78, 90], [], [], [], []]))
-
-{ Fraction }
+export { Fraction }
