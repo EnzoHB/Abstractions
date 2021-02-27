@@ -25,7 +25,7 @@ function ArrayAbstractions(constructor) {
         }, true);
     };
 
-    constructor.prototype.cutOff = function(start, end = start) {
+    constructor.prototype.cut = function(start, end = start) {
         return this.slice(0, start).concat(this.slice(end + 1));
     };
 };
