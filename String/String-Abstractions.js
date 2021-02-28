@@ -1,8 +1,21 @@
-import { Fraction as Frac} from '../Math/fractions.js'
+// ---------------------- Dependencies -------------------------- //
+
+import { Fraction as Frac } from '../Math/fractions.js'
 
 const Fraction = Frac;
 
+// ---------------------- Code ---------------------------------- //
+
 function StringAbstractions(constructor) {
+
+// It converts Roman Numbers to Decimal ones by matching the index
+// of the table with the number it corresponds.
+// For example: XVI - 
+//  It maches 'VI' - Index 6
+//  It matches 'X' - Index 1
+//  It matches '' - Index 0
+//  It matches '' - Index 0
+//  Number('0' + '0' + '1' + '6') == 16 
 
     constructor.prototype.toDecimal = function() {
 
@@ -33,105 +46,101 @@ function StringAbstractions(constructor) {
         return Number(string.join(''));
     };
 
+// 
+
     constructor.prototype.toFraction = function() {
 
         let string = this;
-        const regX = /\.\.\./;
-        const type = 
-        
-        regX.test(string)?
-         'repeating' :
-         'decimal';
+        const matchRepeating = /\.\.\./;
+        const matchDecimal = /\d+\.\d+/;
 
-        const decimal = string.includes(/\./, 'i');
+        const type = matchRepeating.test(string);
+        const decimal = matchDecimal.test(string);
 
-        !decimal?
-         string += '.0' :
-         0 ;
-        
-        if (type == 'decimal') {
+        if (!type) {
 
-            const splitted = string.split('.');
-            const decimalPart = splitted[1];
-            const length = Number(decimalPart)? decimalPart.length : 0;
+            !decimal? string += '.0' : false;
 
-            const denominator = 10 ** length
-            const numerator = Number(string) * denominator;
+            const [_, decimals] = string.split('.');
+            const expoent = Number(decimals)? decimals.length : 0;  
+
+            const denominator = 10 ** expoent;
+            const numerator = string ** denominator;
+
+            return Fraction.simplify([numerator, denominator]);
+
+        };
+
+        if (type) {
+
+            string = string.replace('...', '');
+
+            const [_, decimals] = string.split('.');
+            const info = identify(decimals);
+
+            const essencial = string.replace(info.part, '')
+            const essencial_= essencial + info.digits;
+
+            const expo = 10 ** essencial.split('.')[1].length;
+            const expo_= 10 ** essencial_.split('.')[1].length;
+            
+            const denominator = expo_ - expo;
+            const numerator = essencial_ * expo_ - essencial * expo;
 
             return Fraction.simplify([numerator, denominator])
         };
 
-        if (type == 'repeating') {
+        function identify(decimals) {
 
-            const getRid = string.replace('...', ''); 
-            const splitted = getRid.split('.')
-            const repeatingDigits = identify(splitted[1]);
-            const replaced = getRid.replace(repeatingDigits.part, '')
+            const length = decimals.length;
+            decimals = decimals.invert(); 
 
-            const splitted_ = replaced.split('.');
-            const isso = 10 ** splitted_[1].length;
-            const number = Number(replaced * isso)
+            let result;
 
-            const x0 = number;
-            const x1 = Number(number + repeatingDigits.digits);
-            const isso0 = isso
-            const isso1 = 10 ** (splitted_[1] + repeatingDigits.digits).length
+            for (let t = 0; t < length; t++) {
 
-            const numerator = [x0, x1].sort((a, b) => b - a).reduce((a, b) => a - b)
-            const denominator = [isso0, isso1].sort((a, b) => b - a).reduce((a, b) => a - b);
+                const slice = decimals.slice(0, t + 1)
+                const length = slice.length;
+                const slice_= decimals.slice(length, length + t + 1)
 
-            return Fraction.simplify([numerator, denominator])
+                if (slice == slice_) {
 
-            function identify(decimalPart) {
-
-                const inverted = decimalPart.invert(); 
-                const length = decimalPart.length;
-                const result = [];
-
-                for (let t = 0; t < length; t++) {
-
-                    const slice = inverted.slice(0, t + 1), length = slice.length;
-                    const slice_ = inverted.slice(length, length + t + 1);
-
-                    if (slice == slice_) result.push(slice);
+                    result = slice.invert();
+                    break
                 };
-
-                const repeatingPart = [];
-                const repeatingDigit = result[0] || inverted[0];
-
-                const splitted = inverted.splitBy(repeatingDigit.length);
-                let done = false;
-
-                splitted.forEach(a => {
-
-                    if (repeatingDigit == a && done == false) {
-                        repeatingPart.unshift(a.invert());
-                        return;
-                    } else {
-                        done = true;
-                    };
-                });
-
-                return {part: repeatingPart.join(''), digits: repeatingDigit.invert()}
             };
 
+            const part = [];
+            const digits = result || decimals[0];
+            const splitted = decimals.splitBy(digits.length);
+
+            let ongoing = true;
+
+            splitted.forEach(a => {
+
+                digits == a && ongoing?
+                 part.unshift(a.invert()) :
+                 ongoing = false;
+
+            });
+
+            return {
+                part: part.join(''),
+                digits
+            };
         };
-
-
-        // x = 12.4
-        // 10x = 124.0
     };
+
+// A abstraction that inverts a string. I don't know why JavaScript 
+// does not have one like that.
 
     constructor.prototype.invert = function() {
         return this.split('').reverse().join('')
     };
 
-    constructor.prototype.includes = function(expression, options) {
-
-        const RegX = new RegExp(expression, options);
-        return RegX.test(this)
-
-    };
+// Abstraction that takes a string as input, divides it into pieces
+// and then returns an array. For example : "Foo Bar" - 
+// ['Fo', 'o ', 'Ba', 'r'] 
 
     constructor.prototype.splitBy = function(step = 1) {
         const result = [];
@@ -153,39 +162,4 @@ function StringAbstractions(constructor) {
     };
 };
 
-StringAbstractions(String)
-
-/*
-console.log('1.4...'.toFraction()); // Correto
-console.log('1.356565...'.toFraction()); // correto
-console.log('1.4543...'.toFraction()) // correto
-console.log('1.4433...'.toFraction())
-console.log('1.454456456...'.toFraction());
-console.log('1.454456456456...'.toFraction());
-*/
-
-console.log('0'.toFraction())
-
-// reduceRight() da esquerda para direita
-// Começar assumindo um período de 1
-// Testar 1.454456456 - 
-   // Pegue o último - O próximo é 5
-   // 6 == 6
-   // Próximo 
-   // 56 - O próximo é 64
-   // 56 == 64
-   // Próximo
-   // 456 - O próximo é 456
-   // 456 == 456
-   // Pule para  456 encontrado
-   // O próximo é 456?
-   // Não - O período é 456
-   // Sim - 
-   // O período que se repete é 456 - O resto é período composto.
-   // Break
-// Chegou no length / 2 não encontrou nenhum - Pegue o último dígito como período que se repete.
-
-
-// 144.33 = 100x
-// 1443.33 = 1000x 
-// 900x = 
+export { StringAbstractions }
