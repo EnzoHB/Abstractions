@@ -1,7 +1,7 @@
 // --------------------- Dependecies ----------------------- //
 
-import { MathAbstractions } from './math-abstractions.js'
-import { ArrayAbstractions } from '../Array/array-abstractions.js'
+import { MathAbstractions } from 'https://raw.githubusercontent.com/EnzoHB/Abstractions/main/Math/math-abstractions.js'
+import { ArrayAbstractions } from 'https://raw.githubusercontent.com/EnzoHB/Abstractions/main/Array/array-abstractions.js'
 
 MathAbstractions(Math);
 ArrayAbstractions(Array);
@@ -180,7 +180,7 @@ const Fraction = {
                     Fraction.sort(part)
                     const result = Fraction.subtract(part);
 
-                    if (!Fraction.convert(result) == 0) {
+                    if (Fraction.convert(result) == 0) {
                         simplified.splice(0, 2, part[1]);
                         break;
                     }; 
