@@ -162,4 +162,8 @@ function StringAbstractions(constructor) {
     };
 };
 
+StringAbstractions(String);
+
+console.log('0.3...'.toFraction())
+
 export { StringAbstractions }

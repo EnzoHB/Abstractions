@@ -1,4 +1,4 @@
-import { ArrayAbstractions } from 'https://raw.githubusercontent.com/EnzoHB/Abstractions/main/Array/array-abstractions.js'
+import { ArrayAbstractions } from '../Array/array-abstractions.js'
 ArrayAbstractions(Array);
 
 function MathAbstractions(prototype) {

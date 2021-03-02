@@ -1,7 +1,7 @@
 // --------------------- Dependecies ----------------------- //
 
-import { MathAbstractions } from 'https://raw.githubusercontent.com/EnzoHB/Abstractions/main/Math/math-abstractions.js'
-import { ArrayAbstractions } from 'https://raw.githubusercontent.com/EnzoHB/Abstractions/main/Array/array-abstractions.js'
+import { MathAbstractions } from './math-abstractions.js'
+import { ArrayAbstractions } from '../Array/array-abstractions.js'
 
 MathAbstractions(Math);
 ArrayAbstractions(Array);
@@ -205,6 +205,48 @@ const Fraction = {
 
         return Fraction.simplify(fraction);
     },
+}
+
+/*
+
+
+const Fraction = new Fractions({
+
+    notation: {
+        decimal: true,
+        array: false,
+    },
+
+    arguments: {
+        singleArray: false
+    },
+
+    
+
+
+    separatedArguments: true,
+
+    formatedFractions: true,
+
+    allowRepeatingDecimals: true,
+})
+
+
+// Fraction.calculate('2/3', '+', '8/5')
+// Fraction.gcd('2/4', '4/5', '8/7')
+// Fraction.sort('3/5', '3/1')
+// Fraction.add('9/8', '0.3...')
+// Fraction.lastResult
+// Fraction.lcm('4/6', '3/9', '1/3')
+// Fraction.simplify('2/4', '2/8', '9/2');
+
+
+function add(x) {
+    return (y) => x + y; 
 };
 
-export { Fraction }
+console.log(add(2)(2))
+
+*/
+
+export { Fraction } 
